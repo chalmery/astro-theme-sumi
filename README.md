@@ -14,3 +14,12 @@ npm run dev
 ```
 
 文章位于 `src/content/posts/`，个人信息和社交链接位于 `src/pages/index.astro`。
+
+## GitHub Pages
+
+推送到 `main` 后，GitHub Actions 会自动构建并部署到：
+
+`https://chalmery.github.io/astro-theme-sumi/`
+
+首次使用时，需要在仓库的 **Settings → Pages → Build and deployment** 中将
+**Source** 设置为 **GitHub Actions**。
