@@ -1,0 +1,78 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const publishedAt = post.data.date.toISOString().slice(0, 10);
+---
+
+<BaseLayout title={`${post.data.title} · 山川与字句`} description={post.data.description}>
+  <main class="article-shell">
+    <a class="back" href="/">← 返回文章列表</a>
+    <article>
+      <header class="article-header">
+        <h1>{post.data.title}</h1>
+        <p class="article-meta">
+          <time datetime={post.data.date.toISOString()}>{publishedAt}</time>
+          <span aria-hidden="true">·</span>
+          <span>{post.data.category}</span>
+        </p>
+      </header>
+      <div class="article-content">
+        <Content />
+      </div>
+    </article>
+  </main>
+
+  <script>
+    import mermaid from "mermaid";
+
+    const codeBlocks = [
+      ...document.querySelectorAll<HTMLElement>('pre[data-language="mermaid"]'),
+    ];
+
+    const diagrams = codeBlocks.map((block) => {
+      const container = document.createElement("div");
+      container.className = "mermaid-diagram";
+      container.dataset.source = block.textContent ?? "";
+      block.replaceWith(container);
+      return container;
+    });
+
+    async function renderDiagrams() {
+      if (diagrams.length === 0) return;
+
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: "strict",
+        theme: document.documentElement.dataset.theme === "dark" ? "dark" : "neutral",
+      });
+
+      for (const [index, container] of diagrams.entries()) {
+        const source = container.dataset.source ?? "";
+        const id = `mermaid-${Date.now()}-${index}`;
+        try {
+          const { svg, bindFunctions } = await mermaid.render(id, source);
+          container.innerHTML = svg;
+          bindFunctions?.(container);
+        } catch {
+          container.textContent = source;
+          container.classList.add("mermaid-error");
+        }
+      }
+    }
+
+    renderDiagrams();
+    window.addEventListener("theme-change", renderDiagrams);
+  </script>
+</BaseLayout>
