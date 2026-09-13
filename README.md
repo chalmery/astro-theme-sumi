@@ -55,6 +55,8 @@ draft: false
 
 文章需要填写 `title`、`description`、`date` 和 `category`。将 `draft` 设为 `true` 后，文章不会显示在首页。
 
+建议直接使用文章标题作为文件名，例如 `给复杂生活留一点空白.md`。主题会通过内置的 FNV-1a 32 位哈希算法，将文件名转换为稳定的十进制文章链接，例如 `/posts/3411534746/`；本地文件保持可读，URL 中不会出现中文转义字符，也不依赖 Hexo。
+
 Mermaid 图表可以直接使用代码围栏：
 
 ````md
@@ -77,6 +79,7 @@ flowchart LR
 | 站点标题与默认描述 | `src/layouts/BaseLayout.astro` |
 | 颜色、间距与响应式样式 | `src/styles/global.css` |
 | 文章字段定义 | `src/content.config.ts` |
+| 数字文章链接算法 | `src/utils/postSlug.ts` |
 | 站点地址与部署路径 | `astro.config.mjs` |
 
 社交链接中的用户名和邮箱是示例内容，使用前请替换为自己的信息。
