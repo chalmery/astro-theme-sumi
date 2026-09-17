@@ -11,6 +11,7 @@ Sumi 以时间归档为页面主轴，让文章本身成为视线的焦点；侧
 - 按年份分组、按时间倒序展示文章
 - 在首页直接筛选分类，无需跳转或刷新
 - 支持 Markdown、Shiki 代码高亮和 Mermaid 图表
+- 自动生成 RSS 订阅源
 - 支持浅色与深色模式，并记忆读者的选择
 - 桌面端与移动端响应式布局
 - 内置回到顶部按钮
@@ -71,18 +72,34 @@ flowchart LR
 
 ## 个性化
 
-目前主题刻意保持轻量，常用内容分布在以下文件中：
+主题的常用站点信息集中在 `src/site.config.ts` 中：
+
+```ts
+export const siteConfig = {
+  title: "Sumi",
+  description: "简洁、克制，专注于内容本身的 Astro 博客主题。",
+  profile: {
+    avatarText: "墨",
+    bio: "记录技术、阅读与日常，让每一次思考都有迹可循。",
+  },
+  social: {
+    github: "https://github.com/yourname",
+    x: "https://x.com/yourname",
+    email: "hello@example.com",
+    rss: "rss.xml",
+  },
+};
+```
+
+不需要的社交链接可以留空，页面会自动隐藏对应图标。其他可调整内容如下：
 
 | 内容 | 文件 |
 | --- | --- |
-| 头像、简介、社交链接 | `src/pages/index.astro` |
-| 站点标题与默认描述 | `src/layouts/BaseLayout.astro` |
+| 站点标题、描述、头像、简介与社交链接 | `src/site.config.ts` |
 | 颜色、间距与响应式样式 | `src/styles/global.css` |
 | 文章字段定义 | `src/content.config.ts` |
 | 数字文章链接算法 | `src/utils/postSlug.ts` |
 | 站点地址与部署路径 | `astro.config.mjs` |
-
-社交链接中的用户名和邮箱是示例内容，使用前请替换为自己的信息。
 
 ## 部署到 GitHub Pages
 

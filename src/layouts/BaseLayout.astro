@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { siteConfig } from "../site.config";
 
 interface Props {
   title?: string;
@@ -7,8 +8,8 @@ interface Props {
 }
 
 const {
-  title = "山川与字句",
-  description = "写技术、生活和偶然冒出的念头。",
+  title = siteConfig.title,
+  description = siteConfig.description,
 } = Astro.props;
 ---
 
@@ -33,7 +34,7 @@ const {
 
     <footer class="page-footer">
       由 <a href="https://astro.build/">Astro</a> 驱动 · 主题
-      <a href="https://github.com/chalmery/astro-theme-sumi">sumi</a>
+      <a href={siteConfig.theme.repository}>{siteConfig.theme.name}</a>
     </footer>
 
     <div class="floating-actions" aria-label="页面工具">
